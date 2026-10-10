@@ -21,13 +21,13 @@
   .live-dot{width:8px;height:8px;border-radius:50%;background:#5FD9E0;flex:0 0 8px;animation:liveDotPulse 2s ease-out infinite}
   @keyframes liveDotPulse{0%{box-shadow:0 0 0 0 rgba(95,217,224,.55)}70%{box-shadow:0 0 0 9px rgba(95,217,224,0)}100%{box-shadow:0 0 0 0 rgba(95,217,224,0)}}
   .impact-route{animation:impactRouteFade 7s ease-in-out infinite}
-  @keyframes impactRouteFade{0%,100%{opacity:.14}50%{opacity:.3}}
-  .impact-stat{flex:1 1 150px;background:rgba(255,255,255,.03);border:1px solid #243149;border-radius:12px;padding:18px 16px;transition:transform .25s ease,border-color .25s ease}
-  .impact-stat:hover{transform:translateY(-3px);border-color:#2E4568}
-  .impact-stat-icon{width:30px;height:30px;border-radius:8px;background:rgba(95,217,224,.12);display:flex;align-items:center;justify-content:center;color:#5FD9E0;margin-bottom:12px}
-  .impact-stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0;font-variant-numeric:tabular-nums;display:inline-block;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s ease}
+  @keyframes impactRouteFade{0%,100%{opacity:.1}50%{opacity:.22}}
+  .impact-stat{flex:1 1 150px;background:#FFFFFF;border:1px solid #E4E8EE;border-radius:12px;padding:18px 16px;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+  .impact-stat:hover{transform:translateY(-3px);border-color:#C9D6EE;box-shadow:0 8px 20px rgba(22,58,143,.08)}
+  .impact-stat-icon{width:30px;height:30px;border-radius:8px;background:rgba(22,58,143,.08);display:flex;align-items:center;justify-content:center;color:#163A8F;margin-bottom:12px}
+  .impact-stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#163A8F;font-variant-numeric:tabular-nums;display:inline-block;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s ease}
   .impact-stat-num.pop{transform:scale(1.08);opacity:.85}
-  .impact-stat-label{font-size:12px;color:#8C98AD;margin-top:4px}
+  .impact-stat-label{font-size:12px;color:#667085;margin-top:4px}
   @media (max-width:640px){
     nav,section,footer{padding-left:20px !important;padding-right:20px !important}
     nav{flex-wrap:wrap !important}
@@ -70,6 +70,71 @@
       </a>
     </div>
   </nav>
+
+  <!-- Impact banner : first thing visible on load -->
+  <section style="position:relative;overflow:hidden;background:#F4F7FA;padding:56px 48px 64px;border-bottom:1px solid #E4E8EE">
+    <svg class="impact-route" viewBox="0 0 1200 420" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" aria-hidden="true">
+      <path id="impactRoutePath" d="M-50,360 C 250,210 420,440 760,230 S 1180,70 1300,130" fill="none" stroke="#1CB8C7" stroke-width="2" stroke-dasharray="5 11"/>
+      <circle r="5" fill="#1CB8C7">
+        <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#impactRoutePath"></mpath>
+        </animateMotion>
+      </circle>
+    </svg>
+    <div style="position:relative;max-width:1100px;margin:0 auto;display:flex;gap:56px;flex-wrap:wrap;align-items:flex-end">
+      <div style="flex:1 1 440px">
+        <div style="display:inline-flex;align-items:center;gap:9px;margin-bottom:14px">
+          <span class="live-dot"></span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#0E8A92;text-transform:uppercase">Live impact counter</span>
+        </div>
+        <h2 style="font-weight:700;font-size:30px;margin:0 0 18px;color:#0F1729">Every switch counts — for the rider, and the city.</h2>
+        <p style="font-size:15px;line-height:1.75;color:#3A4354;margin:0;max-width:480px">A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can't either.</p>
+      </div>
+      <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:14px;border-top:1px solid #E4E8EE;padding:16px 0">
+          <div class="icon-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14" r="1"/></svg></div>
+          <div><div style="font-weight:700;font-size:15px;color:#0F1729">Rider cost relief</div><div style="font-size:13px;color:#667085">Lower, predictable weekly cost vs. petrol</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;border-top:1px solid #E4E8EE;border-bottom:1px solid #E4E8EE;padding:16px 0">
+          <div class="icon-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 1 14-5 14-14-9 0-14 5-14 14z"/><path d="M5 19c2-5 5-8 9-10"/></svg></div>
+          <div><div style="font-weight:700;font-size:15px;color:#0F1729">City air</div><div style="font-size:13px;color:#667085">Zero tailpipe emissions, every ride</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:relative;max-width:1100px;margin:40px auto 0;display:flex;flex-wrap:wrap;gap:16px">
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+        <div id="statKm" class="impact-stat-num">0 km</div>
+        <div class="impact-stat-label">Electric km run</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div id="statEarn" class="impact-stat-num">₹0</div>
+        <div class="impact-stat-label">Rider earnings facilitated</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 1 14-5 14-14-9 0-14 5-14 14z"/><path d="M5 19c2-5 5-8 9-10"/></svg></div>
+        <div id="statCo2" class="impact-stat-num">0 kg</div>
+        <div class="impact-stat-label">CO₂ saved</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><rect x="20" y="10" width="2" height="4"/><path d="M8 9l-2 4h3l-2 4"/></svg></div>
+        <div id="statPetrol" class="impact-stat-num">0 L</div>
+        <div class="impact-stat-label">Petrol displaced</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18"/></svg></div>
+        <div id="statForex" class="impact-stat-num">₹0</div>
+        <div class="impact-stat-label">Import spend avoided for India</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6"/></svg></div>
+        <div id="statLives" class="impact-stat-num">0</div>
+        <div class="impact-stat-label">Lives impacted</div>
+      </div>
+    </div>
+  </section>
 
   <!-- Hero : mission-first -->
   <section style="padding:72px 48px 48px">
@@ -220,72 +285,6 @@
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid #E4E8EE;color:#667085"><span style="font-size:15px;padding-left:26px">Hyderabad</span><span style="font-size:12px;letter-spacing:.06em">PLANNED</span></div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid #E4E8EE;color:#667085"><span style="font-size:15px;padding-left:26px">Pune</span><span style="font-size:12px;letter-spacing:.06em">PLANNED</span></div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid #E4E8EE;border-bottom:1px solid #E4E8EE;color:#667085"><span style="font-size:15px;padding-left:26px">Jaipur</span><span style="font-size:12px;letter-spacing:.06em">PLANNED</span></div>
-  </section>
-
-  <!-- Impact -->
-  <section style="position:relative;overflow:hidden;background:#0F1729;color:#FFFFFF;padding:80px 48px;clip-path:polygon(0 4%,100% 0,100% 100%,0 100%)">
-    <svg class="impact-route" viewBox="0 0 1200 420" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" aria-hidden="true">
-      <path id="impactRoutePath" d="M-50,360 C 250,210 420,440 760,230 S 1180,70 1300,130" fill="none" stroke="#1CB8C7" stroke-width="2" stroke-dasharray="5 11"/>
-      <circle r="5" fill="#5FD9E0">
-        <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
-          <mpath href="#impactRoutePath"></mpath>
-        </animateMotion>
-      </circle>
-    </svg>
-    <div style="position:relative;max-width:1100px;margin:0 auto;display:flex;gap:56px;flex-wrap:wrap;align-items:flex-end">
-      <div style="flex:1 1 440px">
-        <div style="display:inline-flex;align-items:center;gap:9px;margin-bottom:14px">
-          <span class="live-dot"></span>
-          <span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#5FD9E0;text-transform:uppercase">Live impact counter</span>
-        </div>
-        <h2 style="font-weight:700;font-size:30px;margin:0 0 18px">Every switch counts — for the rider, and the city.</h2>
-        <p style="font-size:15px;line-height:1.75;color:#AEB9CC;margin:0;max-width:480px">A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can't either.</p>
-      </div>
-      <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:16px">
-        <div style="display:flex;align-items:center;gap:14px;border-top:1px solid #243149;padding:16px 0">
-          <div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14" r="1"/></svg></div>
-          <div><div style="font-weight:700;font-size:15px">Rider cost relief</div><div style="font-size:13px;color:#8C98AD">Lower, predictable weekly cost vs. petrol</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;border-top:1px solid #243149;border-bottom:1px solid #243149;padding:16px 0">
-          <div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 1 14-5 14-14-9 0-14 5-14 14z"/><path d="M5 19c2-5 5-8 9-10"/></svg></div>
-          <div><div style="font-weight:700;font-size:15px">City air</div><div style="font-size:13px;color:#8C98AD">Zero tailpipe emissions, every ride</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div style="position:relative;max-width:1100px;margin:48px auto 0;display:flex;flex-wrap:wrap;gap:16px">
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
-        <div id="statKm" class="impact-stat-num">0 km</div>
-        <div class="impact-stat-label">Electric km run</div>
-      </div>
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div id="statEarn" class="impact-stat-num">₹0</div>
-        <div class="impact-stat-label">Rider earnings facilitated</div>
-      </div>
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 1 14-5 14-14-9 0-14 5-14 14z"/><path d="M5 19c2-5 5-8 9-10"/></svg></div>
-        <div id="statCo2" class="impact-stat-num">0 kg</div>
-        <div class="impact-stat-label">CO₂ saved</div>
-      </div>
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><rect x="20" y="10" width="2" height="4"/><path d="M8 9l-2 4h3l-2 4"/></svg></div>
-        <div id="statPetrol" class="impact-stat-num">0 L</div>
-        <div class="impact-stat-label">Petrol displaced</div>
-      </div>
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18"/></svg></div>
-        <div id="statForex" class="impact-stat-num">₹0</div>
-        <div class="impact-stat-label">Import spend avoided for India</div>
-      </div>
-      <div class="impact-stat">
-        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6"/></svg></div>
-        <div id="statLives" class="impact-stat-num">0</div>
-        <div class="impact-stat-label">Lives impacted</div>
-      </div>
-    </div>
-    <p style="position:relative;max-width:1100px;margin:20px auto 0;font-size:11px;line-height:1.6;color:#5A6478">Illustrative running total, not a live feed yet — modelled on an assumed 80–100 km run and ₹1,000–1,500 earned per rental-day for wallet-positive riders, standard EV-vs-petrol 2W conversion factors for CO₂/fuel/import savings, and rider-reported dependents for lives impacted. Will switch to real fleet data as riders come online.</p>
   </section>
 
   <!-- Partners -->
