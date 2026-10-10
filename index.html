@@ -340,12 +340,13 @@
 </div>
 <script>
 (function(){
-  // Real, PII-free aggregate from the live rider database (see ferotech's public_impact_rider_days()).
+  // Real, PII-free aggregate from the live rider database (see ferotech's public_impact_rider_days()) — the live
+  // FERO database (Supabase project htvektutrkhhualxhcgf); the key is the public browser key, safe in client code.
   // Falls back to a purely illustrative animation if the function isn't live yet or the fetch fails,
   // so the page never looks broken either way.
-  var SUPABASE_URL = 'https://c--841932d2-7c3f-4bf5-a345-8a2aaa4d0a8a-prod.lovable.cloud';
-  var SUPABASE_ANON_KEY = 'sb_publishable_MKU45jGUAFXbp5uwiaiKXg_dM7jZX_U';
-  var CACHE_KEY = 'fero_impact_rider_days_v1';
+  var SUPABASE_URL = 'https://htvektutrkhhualxhcgf.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0dmVrdHV0cmtoaHVhbHhoY2dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDE4NzUsImV4cCI6MjEwNjg3Nzg3NX0.EwyXwTZJmfrEjJG0lMGIy4_OkeuqFlXmRJHRki0v6n0';
+  var CACHE_KEY = 'fero_impact_rider_days_v2';
 
   var els = {};
   function grab(){
