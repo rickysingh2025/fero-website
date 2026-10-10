@@ -18,6 +18,14 @@
   .icon-tile{width:44px;height:44px;border-radius:10px;background:#EEF4FC;display:flex;align-items:center;justify-content:center;color:#163A8F;flex:0 0 44px}
   .icon-tile-dark{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#5FD9E0;flex:0 0 44px}
   h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+  @media (max-width:640px){
+    nav,section,footer{padding-left:20px !important;padding-right:20px !important}
+    nav{flex-direction:column !important;align-items:center !important;text-align:center}
+    nav > div{justify-content:center !important}
+    h1{font-size:28px !important;line-height:1.25 !important}
+    h2{font-size:22px !important}
+    .btn-solid,.btn-ghost{width:100%;justify-content:center}
+  }
 </style>
 </head>
 <body style="margin:0">
@@ -112,7 +120,7 @@
         <button type="button" class="btn-solid" style="margin-bottom:16px">Join the waitlist</button>
         <p style="font-size:12.5px;color:#667085;margin:0">NO DOWN PAYMENT &nbsp;&middot;&nbsp; NO LOAN &nbsp;&middot;&nbsp; NO CREDIT CHECK</p>
       </div>
-      <div style="flex:1 1 380px;min-width:300px;background:#0F1729;border-radius:14px;padding:36px">
+      <div style="flex:1 1 380px;min-width:0;background:#0F1729;border-radius:14px;padding:36px">
         <p style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#5FD9E0;text-transform:uppercase;margin:0 0 20px">Everything in one weekly rent</p>
         <div style="display:flex;flex-direction:column;gap:16px">
           <div style="display:flex;align-items:center;gap:12px"><div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><rect x="20" y="10" width="2" height="4"/><path d="M8 9l-2 4h3l-2 4"/></svg></div><span style="color:#FFFFFF;font-size:15px;font-weight:600">Unlimited battery swaps</span></div>
