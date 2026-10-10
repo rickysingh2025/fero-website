@@ -18,6 +18,16 @@
   .icon-tile{width:44px;height:44px;border-radius:10px;background:#EEF4FC;display:flex;align-items:center;justify-content:center;color:#163A8F;flex:0 0 44px}
   .icon-tile-dark{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#5FD9E0;flex:0 0 44px}
   h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#5FD9E0;flex:0 0 8px;animation:liveDotPulse 2s ease-out infinite}
+  @keyframes liveDotPulse{0%{box-shadow:0 0 0 0 rgba(95,217,224,.55)}70%{box-shadow:0 0 0 9px rgba(95,217,224,0)}100%{box-shadow:0 0 0 0 rgba(95,217,224,0)}}
+  .impact-route{animation:impactRouteFade 7s ease-in-out infinite}
+  @keyframes impactRouteFade{0%,100%{opacity:.14}50%{opacity:.3}}
+  .impact-stat{flex:1 1 150px;background:rgba(255,255,255,.03);border:1px solid #243149;border-radius:12px;padding:18px 16px;transition:transform .25s ease,border-color .25s ease}
+  .impact-stat:hover{transform:translateY(-3px);border-color:#2E4568}
+  .impact-stat-icon{width:30px;height:30px;border-radius:8px;background:rgba(95,217,224,.12);display:flex;align-items:center;justify-content:center;color:#5FD9E0;margin-bottom:12px}
+  .impact-stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0;font-variant-numeric:tabular-nums;display:inline-block;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s ease}
+  .impact-stat-num.pop{transform:scale(1.08);opacity:.85}
+  .impact-stat-label{font-size:12px;color:#8C98AD;margin-top:4px}
   @media (max-width:640px){
     nav,section,footer{padding-left:20px !important;padding-right:20px !important}
     nav{flex-wrap:wrap !important}
@@ -213,9 +223,21 @@
   </section>
 
   <!-- Impact -->
-  <section style="background:#0F1729;color:#FFFFFF;padding:80px 48px;clip-path:polygon(0 4%,100% 0,100% 100%,0 100%)">
-    <div style="max-width:1100px;margin:0 auto;display:flex;gap:56px;flex-wrap:wrap;align-items:flex-end">
+  <section style="position:relative;overflow:hidden;background:#0F1729;color:#FFFFFF;padding:80px 48px;clip-path:polygon(0 4%,100% 0,100% 100%,0 100%)">
+    <svg class="impact-route" viewBox="0 0 1200 420" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" aria-hidden="true">
+      <path id="impactRoutePath" d="M-50,360 C 250,210 420,440 760,230 S 1180,70 1300,130" fill="none" stroke="#1CB8C7" stroke-width="2" stroke-dasharray="5 11"/>
+      <circle r="5" fill="#5FD9E0">
+        <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#impactRoutePath"></mpath>
+        </animateMotion>
+      </circle>
+    </svg>
+    <div style="position:relative;max-width:1100px;margin:0 auto;display:flex;gap:56px;flex-wrap:wrap;align-items:flex-end">
       <div style="flex:1 1 440px">
+        <div style="display:inline-flex;align-items:center;gap:9px;margin-bottom:14px">
+          <span class="live-dot"></span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#5FD9E0;text-transform:uppercase">Live impact counter</span>
+        </div>
         <h2 style="font-weight:700;font-size:30px;margin:0 0 18px">Every switch counts — for the rider, and the city.</h2>
         <p style="font-size:15px;line-height:1.75;color:#AEB9CC;margin:0;max-width:480px">A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can't either.</p>
       </div>
@@ -231,33 +253,39 @@
       </div>
     </div>
 
-    <div style="max-width:1100px;margin:48px auto 0;display:flex;flex-wrap:wrap;gap:28px">
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statKm" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 km</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Electric km run</div>
+    <div style="position:relative;max-width:1100px;margin:48px auto 0;display:flex;flex-wrap:wrap;gap:16px">
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+        <div id="statKm" class="impact-stat-num">0 km</div>
+        <div class="impact-stat-label">Electric km run</div>
       </div>
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statEarn" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">₹0</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Rider earnings facilitated</div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div id="statEarn" class="impact-stat-num">₹0</div>
+        <div class="impact-stat-label">Rider earnings facilitated</div>
       </div>
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statCo2" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 kg</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">CO₂ saved</div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 1 14-5 14-14-9 0-14 5-14 14z"/><path d="M5 19c2-5 5-8 9-10"/></svg></div>
+        <div id="statCo2" class="impact-stat-num">0 kg</div>
+        <div class="impact-stat-label">CO₂ saved</div>
       </div>
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statPetrol" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 L</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Petrol displaced</div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><rect x="20" y="10" width="2" height="4"/><path d="M8 9l-2 4h3l-2 4"/></svg></div>
+        <div id="statPetrol" class="impact-stat-num">0 L</div>
+        <div class="impact-stat-label">Petrol displaced</div>
       </div>
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statForex" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">₹0</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Import spend avoided for India</div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18"/></svg></div>
+        <div id="statForex" class="impact-stat-num">₹0</div>
+        <div class="impact-stat-label">Import spend avoided for India</div>
       </div>
-      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
-        <div id="statLives" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0</div>
-        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Lives impacted</div>
+      <div class="impact-stat">
+        <div class="impact-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6"/></svg></div>
+        <div id="statLives" class="impact-stat-num">0</div>
+        <div class="impact-stat-label">Lives impacted</div>
       </div>
     </div>
-    <p style="max-width:1100px;margin:20px auto 0;font-size:11px;line-height:1.6;color:#5A6478">Illustrative running total, not a live feed yet — modelled on an assumed 80–100 km run and ₹1,000–1,500 earned per rental-day for wallet-positive riders, standard EV-vs-petrol 2W conversion factors for CO₂/fuel/import savings, and rider-reported dependents for lives impacted. Will switch to real fleet data as riders come online.</p>
+    <p style="position:relative;max-width:1100px;margin:20px auto 0;font-size:11px;line-height:1.6;color:#5A6478">Illustrative running total, not a live feed yet — modelled on an assumed 80–100 km run and ₹1,000–1,500 earned per rental-day for wallet-positive riders, standard EV-vs-petrol 2W conversion factors for CO₂/fuel/import savings, and rider-reported dependents for lives impacted. Will switch to real fleet data as riders come online.</p>
   </section>
 
   <!-- Partners -->
@@ -369,6 +397,14 @@
     els.forex.textContent = '₹' + fmt(stats.forex);
     els.lives.textContent = fmt(stats.lives);
   }
+  // Brief scale/opacity pop on each periodic (non-ramp) update, so new ticks feel alive rather than static.
+  function pop(el){
+    if(!el) return;
+    el.classList.add('pop');
+    setTimeout(function(){ el.classList.remove('pop'); }, 350);
+  }
+  function popAll(){ [els.km, els.earn, els.co2, els.petrol, els.forex, els.lives].forEach(pop); }
+  function easeOutCubic(p){ return 1 - Math.pow(1 - p, 3); }
 
   // Lives impacted has no real data source yet (no dependents field at onboarding) — stays a slow,
   // clearly-illustrative drip either way, independent of the real rider-days number.
@@ -386,19 +422,19 @@
 
   function animateTo(target){
     var start = {km:0,earn:0,co2:0,petrol:0,forex:0,lives:0};
-    var steps = 60, i = 0;
+    var steps = 70, i = 0;
     var timer = setInterval(function(){
       i++;
-      var p = Math.min(1, i / steps);
+      var p = easeOutCubic(Math.min(1, i / steps));
       var cur = {};
       for(var k in target){ cur[k] = start[k] + (target[k]-start[k]) * p; }
       livesTick(cur);
       paint(cur);
-      if(p >= 1){
+      if(i >= steps){
         clearInterval(timer);
-        setInterval(function(){ livesTick(target); paint(target); }, 5000);
+        setInterval(function(){ livesTick(target); paint(target); popAll(); }, 5000);
       }
-    }, 40);
+    }, 35);
   }
 
   function runFallback(){
@@ -413,6 +449,7 @@
       if(Math.random() < 0.9){ stats.earn += rand(1000,1500); }
       livesTick(stats);
       paint(stats);
+      popAll();
     }
     tick();
     setInterval(tick, 5000);
