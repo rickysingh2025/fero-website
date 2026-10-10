@@ -340,39 +340,118 @@
 </div>
 <script>
 (function(){
-  var stats = {km:0, earn:0, co2:0, petrol:0, forex:0, lives:0};
-  var ticks = 0;
+  // Real, PII-free aggregate from the live rider database (see ferotech's public_impact_rider_days()).
+  // Falls back to a purely illustrative animation if the function isn't live yet or the fetch fails,
+  // so the page never looks broken either way.
+  var SUPABASE_URL = 'https://c--841932d2-7c3f-4bf5-a345-8a2aaa4d0a8a-prod.lovable.cloud';
+  var SUPABASE_ANON_KEY = 'sb_publishable_MKU45jGUAFXbp5uwiaiKXg_dM7jZX_U';
+  var CACHE_KEY = 'fero_impact_rider_days_v1';
+
+  var els = {};
+  function grab(){
+    els.km = document.getElementById('statKm');
+    els.earn = document.getElementById('statEarn');
+    els.co2 = document.getElementById('statCo2');
+    els.petrol = document.getElementById('statPetrol');
+    els.forex = document.getElementById('statForex');
+    els.lives = document.getElementById('statLives');
+    return !!els.km;
+  }
   function rand(min,max){ return Math.random()*(max-min)+min; }
   function fmt(n){ return Math.round(n).toLocaleString('en-IN'); }
-  function render(){
-    var km = document.getElementById('statKm');
-    var earn = document.getElementById('statEarn');
-    var co2 = document.getElementById('statCo2');
-    var petrol = document.getElementById('statPetrol');
-    var forex = document.getElementById('statForex');
-    var lives = document.getElementById('statLives');
-    if(!km) return;
-    km.textContent = fmt(stats.km) + ' km';
-    earn.textContent = '₹' + fmt(stats.earn);
-    co2.textContent = fmt(stats.co2) + ' kg';
-    petrol.textContent = fmt(stats.petrol) + ' L';
-    forex.textContent = '₹' + fmt(stats.forex);
-    lives.textContent = fmt(stats.lives);
+  function paint(stats){
+    if(!els.km) return;
+    els.km.textContent = fmt(stats.km) + ' km';
+    els.earn.textContent = '₹' + fmt(stats.earn);
+    els.co2.textContent = fmt(stats.co2) + ' kg';
+    els.petrol.textContent = fmt(stats.petrol) + ' L';
+    els.forex.textContent = '₹' + fmt(stats.forex);
+    els.lives.textContent = fmt(stats.lives);
   }
-  function tick(){
-    var kmThisTick = rand(80,100);
-    stats.km += kmThisTick;
-    stats.co2 += kmThisTick * 0.065;
-    var petrolThisTick = kmThisTick / 40;
-    stats.petrol += petrolThisTick;
-    stats.forex += petrolThisTick * 38;
-    if(Math.random() < 0.9){ stats.earn += rand(1000,1500); }
-    ticks++;
-    if(ticks % 12 === 0){ stats.lives += 3; }
-    render();
+
+  // Lives impacted has no real data source yet (no dependents field at onboarding) — stays a slow,
+  // clearly-illustrative drip either way, independent of the real rider-days number.
+  var lives = 0, liveTicks = 0;
+  function livesTick(stats){
+    liveTicks++;
+    if(liveTicks % 12 === 0){ lives += 3; }
+    stats.lives = lives;
   }
-  tick();
-  setInterval(tick, 5000);
+
+  function statsFromRiderDays(days){
+    var km = days * rand(80,100);
+    return { km: km, earn: days * rand(1000,1500), co2: km*0.065, petrol: km/40, forex: (km/40)*38, lives: 0 };
+  }
+
+  function animateTo(target){
+    var start = {km:0,earn:0,co2:0,petrol:0,forex:0,lives:0};
+    var steps = 60, i = 0;
+    var timer = setInterval(function(){
+      i++;
+      var p = Math.min(1, i / steps);
+      var cur = {};
+      for(var k in target){ cur[k] = start[k] + (target[k]-start[k]) * p; }
+      livesTick(cur);
+      paint(cur);
+      if(p >= 1){
+        clearInterval(timer);
+        setInterval(function(){ livesTick(target); paint(target); }, 5000);
+      }
+    }, 40);
+  }
+
+  function runFallback(){
+    var stats = {km:0, earn:0, co2:0, petrol:0, forex:0, lives:0};
+    function tick(){
+      var kmThisTick = rand(80,100);
+      stats.km += kmThisTick;
+      stats.co2 += kmThisTick * 0.065;
+      var petrolThisTick = kmThisTick / 40;
+      stats.petrol += petrolThisTick;
+      stats.forex += petrolThisTick * 38;
+      if(Math.random() < 0.9){ stats.earn += rand(1000,1500); }
+      livesTick(stats);
+      paint(stats);
+    }
+    tick();
+    setInterval(tick, 5000);
+  }
+
+  function cachedDays(){
+    try{
+      var raw = localStorage.getItem(CACHE_KEY);
+      if(!raw) return null;
+      var obj = JSON.parse(raw);
+      var today = new Date().toISOString().slice(0,10);
+      return obj.date === today ? obj.days : null;
+    } catch(e){ return null; }
+  }
+  function cacheSet(days){
+    try{ localStorage.setItem(CACHE_KEY, JSON.stringify({date: new Date().toISOString().slice(0,10), days: days})); } catch(e){}
+  }
+
+  function fetchRiderDays(cb){
+    var c = cachedDays();
+    if(c != null){ cb(c); return; }
+    fetch(SUPABASE_URL + '/rest/v1/rpc/public_impact_rider_days', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      body: '{}'
+    }).then(function(r){ if(!r.ok) throw new Error('bad status'); return r.json(); })
+      .then(function(days){
+        if(typeof days !== 'number'){ throw new Error('bad payload'); }
+        cacheSet(days);
+        cb(days);
+      })
+      .catch(function(){ cb(null); });
+  }
+
+  if(grab()){
+    fetchRiderDays(function(days){
+      if(days != null && days > 0){ animateTo(statsFromRiderDays(days)); }
+      else { runFallback(); }
+    });
+  }
 })();
 </script>
 </body>
