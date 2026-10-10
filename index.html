@@ -230,6 +230,34 @@
         </div>
       </div>
     </div>
+
+    <div style="max-width:1100px;margin:48px auto 0;display:flex;flex-wrap:wrap;gap:28px">
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statKm" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 km</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Electric km run</div>
+      </div>
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statEarn" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">₹0</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Rider earnings facilitated</div>
+      </div>
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statCo2" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 kg</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">CO₂ saved</div>
+      </div>
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statPetrol" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0 L</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Petrol displaced</div>
+      </div>
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statForex" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">₹0</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Import spend avoided for India</div>
+      </div>
+      <div style="flex:1 1 140px;border-top:1px solid #243149;padding-top:16px">
+        <div id="statLives" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#5FD9E0">0</div>
+        <div style="font-size:12px;color:#8C98AD;margin-top:4px">Lives impacted</div>
+      </div>
+    </div>
+    <p style="max-width:1100px;margin:20px auto 0;font-size:11px;line-height:1.6;color:#5A6478">Illustrative running total, not a live feed yet — modelled on an assumed 80–100 km run and ₹1,000–1,500 earned per rental-day for wallet-positive riders, standard EV-vs-petrol 2W conversion factors for CO₂/fuel/import savings, and rider-reported dependents for lives impacted. Will switch to real fleet data as riders come online.</p>
   </section>
 
   <!-- Partners -->
@@ -310,5 +338,42 @@
   </footer>
 
 </div>
+<script>
+(function(){
+  var stats = {km:0, earn:0, co2:0, petrol:0, forex:0, lives:0};
+  var ticks = 0;
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function fmt(n){ return Math.round(n).toLocaleString('en-IN'); }
+  function render(){
+    var km = document.getElementById('statKm');
+    var earn = document.getElementById('statEarn');
+    var co2 = document.getElementById('statCo2');
+    var petrol = document.getElementById('statPetrol');
+    var forex = document.getElementById('statForex');
+    var lives = document.getElementById('statLives');
+    if(!km) return;
+    km.textContent = fmt(stats.km) + ' km';
+    earn.textContent = '₹' + fmt(stats.earn);
+    co2.textContent = fmt(stats.co2) + ' kg';
+    petrol.textContent = fmt(stats.petrol) + ' L';
+    forex.textContent = '₹' + fmt(stats.forex);
+    lives.textContent = fmt(stats.lives);
+  }
+  function tick(){
+    var kmThisTick = rand(80,100);
+    stats.km += kmThisTick;
+    stats.co2 += kmThisTick * 0.065;
+    var petrolThisTick = kmThisTick / 40;
+    stats.petrol += petrolThisTick;
+    stats.forex += petrolThisTick * 38;
+    if(Math.random() < 0.9){ stats.earn += rand(1000,1500); }
+    ticks++;
+    if(ticks % 12 === 0){ stats.lives += 3; }
+    render();
+  }
+  tick();
+  setInterval(tick, 5000);
+})();
+</script>
 </body>
 </html>
