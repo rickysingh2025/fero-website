@@ -367,13 +367,13 @@
 </div>
 <script>
 (function(){
-  // Real, PII-free aggregate from the live rider database (see ferotech's public_impact_rider_days()) — the live
-  // FERO database (Supabase project htvektutrkhhualxhcgf); the key is the public browser key, safe in client code.
-  // Falls back to a purely illustrative animation if the function isn't live yet or the fetch fails,
-  // so the page never looks broken either way.
+  // Real, PII-free aggregates from the live rider database (ferotech's public_impact_rider_days() and
+  // public_impact_riders_created()) — Supabase project htvektutrkhhualxhcgf; the key is the public browser key,
+  // safe in client code. Falls back to a purely illustrative animation if either function isn't live yet or the
+  // fetch fails, so the page never looks broken either way.
   var SUPABASE_URL = 'https://htvektutrkhhualxhcgf.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0dmVrdHV0cmtoaHVhbHhoY2dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDE4NzUsImV4cCI6MjEwNjg3Nzg3NX0.EwyXwTZJmfrEjJG0lMGIy4_OkeuqFlXmRJHRki0v6n0';
-  var CACHE_KEY = 'fero_impact_rider_days_v2';
+  var CACHE_KEY = 'fero_impact_stats_v3';
 
   var els = {};
   function grab(){
@@ -405,18 +405,11 @@
   function popAll(){ [els.km, els.earn, els.co2, els.petrol, els.forex, els.lives].forEach(pop); }
   function easeOutCubic(p){ return 1 - Math.pow(1 - p, 3); }
 
-  // Lives impacted has no real data source yet (no dependents field at onboarding) — stays a slow,
-  // clearly-illustrative drip either way, independent of the real rider-days number.
-  var lives = 0, liveTicks = 0;
-  function livesTick(stats){
-    liveTicks++;
-    if(liveTicks % 12 === 0){ lives += 3; }
-    stats.lives = lives;
-  }
-
-  function statsFromRiderDays(days){
+  // Lives impacted = unique riders ever created (public_impact_riders_created()) x 4 — the rider plus 3 family
+  // members (founder 2026-10-10). Real number like the others once both fetches succeed; no fake drip.
+  function statsFromReal(days, riders){
     var km = days * rand(80,100);
-    return { km: km, earn: days * rand(1000,1500), co2: km*0.065, petrol: km/40, forex: (km/40)*38, lives: 0 };
+    return { km: km, earn: days * rand(1000,1500), co2: km*0.065, petrol: km/40, forex: (km/40)*38, lives: riders*4 };
   }
 
   function animateTo(target){
@@ -427,17 +420,19 @@
       var p = easeOutCubic(Math.min(1, i / steps));
       var cur = {};
       for(var k in target){ cur[k] = start[k] + (target[k]-start[k]) * p; }
-      livesTick(cur);
       paint(cur);
       if(i >= steps){
         clearInterval(timer);
-        setInterval(function(){ livesTick(target); paint(target); popAll(); }, 5000);
+        setInterval(function(){ paint(target); popAll(); }, 5000);
       }
     }, 35);
   }
 
+  // Purely illustrative fallback if either real number isn't reachable — lives keeps its old slow drip here,
+  // since nothing real backs it in this path.
   function runFallback(){
     var stats = {km:0, earn:0, co2:0, petrol:0, forex:0, lives:0};
+    var liveTicks = 0;
     function tick(){
       var kmThisTick = rand(80,100);
       stats.km += kmThisTick;
@@ -446,7 +441,8 @@
       stats.petrol += petrolThisTick;
       stats.forex += petrolThisTick * 38;
       if(Math.random() < 0.9){ stats.earn += rand(1000,1500); }
-      livesTick(stats);
+      liveTicks++;
+      if(liveTicks % 12 === 0){ stats.lives += 3; }
       paint(stats);
       popAll();
     }
@@ -454,38 +450,47 @@
     setInterval(tick, 5000);
   }
 
-  function cachedDays(){
+  function cachedData(){
     try{
       var raw = localStorage.getItem(CACHE_KEY);
       if(!raw) return null;
       var obj = JSON.parse(raw);
       var today = new Date().toISOString().slice(0,10);
-      return obj.date === today ? obj.days : null;
+      return obj.date === today ? obj : null;
     } catch(e){ return null; }
   }
-  function cacheSet(days){
-    try{ localStorage.setItem(CACHE_KEY, JSON.stringify({date: new Date().toISOString().slice(0,10), days: days})); } catch(e){}
+  function cacheSet(days, riders){
+    try{ localStorage.setItem(CACHE_KEY, JSON.stringify({date: new Date().toISOString().slice(0,10), days: days, riders: riders})); } catch(e){}
   }
 
-  function fetchRiderDays(cb){
-    var c = cachedDays();
-    if(c != null){ cb(c); return; }
-    fetch(SUPABASE_URL + '/rest/v1/rpc/public_impact_rider_days', {
+  function rpc(name, cb){
+    fetch(SUPABASE_URL + '/rest/v1/rpc/' + name, {
       method: 'POST',
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
       body: '{}'
     }).then(function(r){ if(!r.ok) throw new Error('bad status'); return r.json(); })
-      .then(function(days){
-        if(typeof days !== 'number'){ throw new Error('bad payload'); }
-        cacheSet(days);
-        cb(days);
-      })
+      .then(function(v){ if(typeof v !== 'number'){ throw new Error('bad payload'); } cb(v); })
       .catch(function(){ cb(null); });
   }
 
+  function fetchStats(cb){
+    var c = cachedData();
+    if(c != null){ cb(c.days, c.riders); return; }
+    var days = null, riders = null, done = 0;
+    function maybeDone(){
+      done++;
+      if(done === 2){
+        if(days != null && riders != null){ cacheSet(days, riders); }
+        cb(days, riders);
+      }
+    }
+    rpc('public_impact_rider_days', function(v){ days = v; maybeDone(); });
+    rpc('public_impact_riders_created', function(v){ riders = v; maybeDone(); });
+  }
+
   if(grab()){
-    fetchRiderDays(function(days){
-      if(days != null && days > 0){ animateTo(statsFromRiderDays(days)); }
+    fetchStats(function(days, riders){
+      if(days != null && days > 0 && riders != null && riders > 0){ animateTo(statsFromReal(days, riders)); }
       else { runFallback(); }
     });
   }
