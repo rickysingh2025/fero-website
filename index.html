@@ -87,8 +87,8 @@
           <span class="live-dot"></span>
           <span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#0E8A92;text-transform:uppercase">Live impact counter</span>
         </div>
-        <h2 style="font-weight:700;font-size:30px;margin:0 0 18px;color:#0F1729">Every switch counts — for the rider, and the city.</h2>
-        <p style="font-size:15px;line-height:1.75;color:#3A4354;margin:0;max-width:480px">A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can't either.</p>
+        <h2 id="impactHeadline" style="font-weight:700;font-size:30px;margin:0 0 18px;color:#0F1729;transition:opacity .5s ease">Every switch counts — for the rider, and the city.</h2>
+        <p id="impactSubtext" style="font-size:15px;line-height:1.75;color:#3A4354;margin:0;max-width:480px;transition:opacity .5s ease">A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can't either.</p>
       </div>
       <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:16px">
         <div style="display:flex;align-items:center;gap:14px;border-top:1px solid #E4E8EE;padding:16px 0">
@@ -144,7 +144,7 @@
         <span style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#1CB8C7;text-transform:uppercase">Electric Mobility &middot; Gig Economy Infrastructure</span>
       </div>
       <h1 style="font-weight:700;font-size:56px;line-height:1.08;margin:0 0 26px;letter-spacing:-.02em;max-width:800px;color:#0F1729">Powering the two-wheelers that power India's gig economy.</h1>
-      <p style="font-size:17px;line-height:1.7;color:#3A4354;margin:0;max-width:620px">Fero owns and operates electric two-wheeler fleets, renting them to delivery riders on a single weekly price that includes energy, maintenance and insurance — the mobility infrastructure layer beneath India's gig-delivery economy.</p>
+      <p style="font-size:17px;line-height:1.7;color:#3A4354;margin:0;max-width:620px">Fero owns and operates electric two-wheeler fleets, renting them to delivery riders on a single weekly price that includes energy and maintenance — the mobility infrastructure layer beneath India's gig-delivery economy.</p>
     </div>
   </section>
 
@@ -202,7 +202,6 @@
           <div style="display:flex;align-items:center;gap:12px"><div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><rect x="20" y="10" width="2" height="4"/><path d="M8 9l-2 4h3l-2 4"/></svg></div><span style="color:#FFFFFF;font-size:15px;font-weight:600">Unlimited battery swaps</span></div>
           <div style="display:flex;align-items:center;gap:12px"><div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 005.4-5.4l-2.8 2.8-2-2 2.8-2.8z"/></svg></div><span style="color:#FFFFFF;font-size:15px;font-weight:600">Repairs &amp; servicing</span></div>
           <div style="display:flex;align-items:center;gap:12px"><div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M5.5 17.5h5l2-7h4M10 10h5l3 4.5M9 10l2-4h3"/></svg></div><span style="color:#FFFFFF;font-size:15px;font-weight:600">Same-day replacement bike</span></div>
-          <div style="display:flex;align-items:center;gap:12px"><div class="icon-tile-dark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div><span style="color:#FFFFFF;font-size:15px;font-weight:600">Full insurance cover</span></div>
         </div>
       </div>
     </div>
@@ -335,7 +334,7 @@
     <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;margin-bottom:40px">
       <div style="flex:1 1 220px">
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#FFFFFF;margin-bottom:10px">FERO</div>
-        <p style="font-size:13px;line-height:1.6;color:#6B7690;max-width:260px">Electric two-wheelers on weekly rent for India's gig riders. Battery swaps, repairs, replacement bike and insurance — included.</p>
+        <p style="font-size:13px;line-height:1.6;color:#6B7690;max-width:260px">Electric two-wheelers on weekly rent for India's gig riders. Battery swaps, repairs and replacement bike — included.</p>
       </div>
       <div style="flex:1 1 160px">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#FFFFFF;margin-bottom:14px">Company</div>
@@ -366,6 +365,35 @@
 </div>
 <script>
 (function(){
+  // Rotating headline/subtext for the impact banner — crossfades through a few angles on the same story so the
+  // banner doesn't feel static, independent of the real-data counters below it.
+  var IMPACT_MESSAGES = [
+    { h: 'Every switch counts — for the rider, and the city.', s: 'A 2W EV swap removes the daily fuel bill a gig rider can least afford — and the tailpipe emissions a city can’t either.' },
+    { h: 'A livelihood that isn’t held hostage by petrol prices.', s: 'Every rupee a rider doesn’t spend on fuel is a rupee they take home — Fero fixes that cost, week after week.' },
+    { h: 'Zero tailpipe emissions, one ride at a time.', s: 'Every electric kilometre on our fleet is a kilometre of exhaust that never reached the city’s air.' },
+    { h: 'Less fuel burned. Less money leaving India.', s: 'Every litre of petrol an EV displaces is a litre India didn’t need to import.' },
+    { h: 'No down payment. No ownership risk. Just a ride that works.', s: 'Riders get a reliable electric scooter without the debt or breakdown risk of owning one.' },
+    { h: 'Behind every number here is a rider’s day that went right.', s: 'A scooter that didn’t break down, a fuel bill that didn’t eat the day’s earnings.' }
+  ];
+  function startImpactMessageRotation(){
+    var hEl = document.getElementById('impactHeadline');
+    var sEl = document.getElementById('impactSubtext');
+    if(!hEl || !sEl) return;
+    var i = 0;
+    setInterval(function(){
+      i = (i + 1) % IMPACT_MESSAGES.length;
+      hEl.style.opacity = 0;
+      sEl.style.opacity = 0;
+      setTimeout(function(){
+        hEl.textContent = IMPACT_MESSAGES[i].h;
+        sEl.textContent = IMPACT_MESSAGES[i].s;
+        hEl.style.opacity = 1;
+        sEl.style.opacity = 1;
+      }, 500);
+    }, 6000);
+  }
+  startImpactMessageRotation();
+
   // Real, PII-free aggregates from the live rider database (ferotech's public_impact_rider_days() and
   // public_impact_riders_created()) — Supabase project htvektutrkhhualxhcgf; the key is the public browser key,
   // safe in client code. Falls back to a purely illustrative animation if either function isn't live yet or the
