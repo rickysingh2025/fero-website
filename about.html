@@ -17,8 +17,10 @@
   h1,h2,h3{font-family:'Space Grotesk',sans-serif}
   @media (max-width:640px){
     nav,section,footer{padding-left:20px !important;padding-right:20px !important}
-    nav{flex-direction:column !important;align-items:center !important;text-align:center}
-    nav > div{justify-content:center !important}
+    nav{flex-wrap:wrap !important}
+    nav > a{order:1}
+    nav > div:first-of-type{order:3;flex-basis:100% !important;justify-content:center !important;margin-top:10px !important}
+    nav > div:last-of-type{order:2}
     h1{font-size:28px !important;line-height:1.25 !important}
     h2{font-size:22px !important}
     .btn-solid,.btn-ghost{width:100%;justify-content:center}
