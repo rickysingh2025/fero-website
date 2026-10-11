@@ -448,8 +448,9 @@
   // Lives impacted = unique riders ever created (public_impact_riders_created()) x 4 — the rider plus 3 family
   // members (founder 2026-10-10). Real number like the others once both fetches succeed; no fake drip.
   function statsFromReal(days, riders){
-    var km = days * rand(80,100);
-    return { km: km, earn: days * rand(1000,1500), co2: km*0.065, petrol: km/40, forex: (km/40)*38, lives: riders*4 };
+    // Fixed per-rider-day averages (founder 2026-10-11) so the figures only move when the real data does.
+    var km = days * 93;
+    return { km: km, earn: days * 1257, co2: km*0.065, petrol: km/40, forex: (km/40)*38, lives: riders*4 };
   }
 
   function animateTo(target){
