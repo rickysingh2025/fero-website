@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://feromotion.com/sitemap.xml
